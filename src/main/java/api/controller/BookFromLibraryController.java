@@ -88,7 +88,7 @@ public class BookFromLibraryController {
 		book.setAuthor(author);
 		book.setBookName(bookName.trim());
 		book.setFileName(file.getOriginalFilename());
-		book.setPathToFile(fileSystemStorageService.getLocation() + System.lineSeparator() + file.getOriginalFilename());
+		book.setPathToFile(fileSystemStorageService.getLocation() + File.separator + file.getOriginalFilename());
 		fileSystemStorageService.store(fileFromMultipart);
 		book.setAmountOfSentences(amountOfSentences);
 		book.setAmountOfWords(amountOfWords);
