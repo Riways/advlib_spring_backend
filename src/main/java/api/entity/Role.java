@@ -1,5 +1,8 @@
 package api.entity;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.*;
 
 @Entity
@@ -15,7 +18,10 @@ public class Role {
 	
 	@Column(length = 150, nullable = false)
 	private String description;
-
+	
+	@ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY )
+	private Set<User> users = new HashSet<>();
+	
 	public Role() {
 	}
 	

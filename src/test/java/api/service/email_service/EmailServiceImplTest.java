@@ -14,8 +14,8 @@ class EmailServiceImplTest {
 	@Test
 	void testSendEmail() {
 		System.out.println(emailService);
-		String to = "aqua-1993@mail.ru";
-		emailService.sendEmail("test", to);
+		String to = "gmdcpbhldpsdukeqhe@kvhrw.com";
+		emailService.sendEmail("test2", to);
 	}
 
 }
