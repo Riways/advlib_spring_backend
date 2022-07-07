@@ -57,7 +57,11 @@ public class SentencesAndLettersAnalyzeImpl implements SentencesAndLettersAnalyz
 		double readability = (0.0588*l - 0.296*s -15.8);
 		
 		int result = (int) Math.round(readability);
-		return result < 16 ? result : 16;
+		if(result>16)
+			return 16;
+		if(result<1)
+			return 1;
+		return result;
 	}
 	
 	public int getSummaryAmountOfWords(ArrayList<WordAndCounter> words) {

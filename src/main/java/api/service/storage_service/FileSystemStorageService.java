@@ -102,9 +102,10 @@ public class FileSystemStorageService implements StorageService {
 		if (Files.exists(pathToCreatingFile)) {
 			throw new StorageException("File " + fileName + " already exist in storage");
 		}
-		if (!file.canExecute()) {
-			throw new StorageException("Failed to store empty file " + fileName);
-		} else if (!fileName.endsWith(".txt")) {
+//		if (!file.canExecute()) {
+//			throw new StorageException("Failed to store empty file " + fileName);
+//		} else 
+		if (!fileName.endsWith(".txt")) {
 			logger.debug("Not txt");
 			throw new StorageException("File must be of type txt");
 		}
