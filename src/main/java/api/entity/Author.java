@@ -18,9 +18,6 @@ public class Author {
     @Column(name = "full_name")
     private String fullName;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author" )
-    transient private List<BookFromLibrary> authorBooks;
-
     public Author() {
     }
 
@@ -46,20 +43,11 @@ public class Author {
         this.fullName = fullName;
     }
 
-    public List<BookFromLibrary> getAuthorBooks() {
-        return authorBooks;
-    }
-
-    public void setAuthorBooks(List<BookFromLibrary> authorBooks) {
-        this.authorBooks = authorBooks;
-    }
-
     @Override
     public String toString() {
         return "Author{" +
                 "id=" + id +
                 ", fullName='" + fullName + '\'' +
-                ", authorBooks=" + authorBooks +
                 '}';
     }
 }
