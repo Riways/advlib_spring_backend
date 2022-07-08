@@ -14,12 +14,18 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import api.service.storage_service.FileSystemStorageService;
 
 
 @Service
 public class EmailServiceImpl implements EmailService {
+	
+	Logger logger = LoggerFactory.getLogger(EmailServiceImpl.class);
 	
 	@Value("${email.properties.path}")
 	private String pathToProp;
@@ -54,6 +60,10 @@ public class EmailServiceImpl implements EmailService {
             message.setSubject("verification code");
 
             message.setText(messageToSend);
+            
+            logger.debug(password);
+            logger.debug(username);
+            logger.debug(receiver);
 
             Transport.send(message);
 			
