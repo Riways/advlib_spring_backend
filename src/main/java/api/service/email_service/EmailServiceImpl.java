@@ -1,4 +1,5 @@
 package api.service.email_service;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -19,23 +20,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import api.service.storage_service.FileSystemStorageService;
-
 
 @Service
 public class EmailServiceImpl implements EmailService {
-	
+
 	Logger logger = LoggerFactory.getLogger(EmailServiceImpl.class);
-	
+
 	@Value("${email.properties.path}")
 	private String pathToProp;
-	
+
 	private Properties prop;
-	
+
 	public EmailServiceImpl() {
 	}
 
-	public void sendEmail(  String messageToSend, String receiver) {
+	public void sendEmail(String messageToSend, String receiver) {
 		prop = new Properties();
 		FileInputStream fis = null;
 		try {
@@ -43,53 +42,48 @@ public class EmailServiceImpl implements EmailService {
 			prop.load(fis);
 			String username = prop.getProperty("mail.smtp.user");
 			String password = prop.getProperty("mail.smtp.password");
-			Session  session = Session.getInstance(prop, new Authenticator() {
+			Session session = Session.getInstance(prop, new Authenticator() {
 				protected PasswordAuthentication getPasswordAuthentication() {
 
-	                return new PasswordAuthentication(username, password );
+					return new PasswordAuthentication(username, password);
 
-	            }
-			}) ;
-//			session.setDebug(true);
+				}
+			});
 			MimeMessage message = new MimeMessage(session);
-			
-            message.setFrom(new InternetAddress(username));
-            
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(receiver));
 
-            message.setSubject("verification code");
+			message.setFrom(new InternetAddress(username));
 
-            message.setText(messageToSend);
-            
-            logger.debug(password);
-            logger.debug(username);
-            logger.debug(receiver);
+			message.addRecipient(Message.RecipientType.TO, new InternetAddress(receiver));
 
-            Transport.send(message);
-			
+			message.setSubject("verification code");
+
+			message.setText(messageToSend);
+
+			Transport.send(message);
+			logger.debug("code sent to" + receiver);
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (MessagingException e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			try {
 				fis.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		
 
 	}
 
 	@Override
 	public String generateCode() {
-		String code ="";
-		for(int x = 0; x<9 ; x++) {
+		String code = "";
+		for (int x = 0; x < 9; x++) {
 			int i = ThreadLocalRandom.current().nextInt(65, 119);
-			code+=(char)i;
+			code += (char) i;
 		}
 		return code;
 	}

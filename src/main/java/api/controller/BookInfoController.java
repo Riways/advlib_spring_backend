@@ -1,5 +1,6 @@
 package api.controller;
 
+import api.entity.BookAndWords;
 import api.entity.BookFromLibrary;
 import api.entity.WordAndCounter;
 import api.service.book_from_library_service.BookFromLibraryServiceImplementation;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("api/words")
@@ -36,13 +36,14 @@ public class BookInfoController {
 
     @CrossOrigin
     @GetMapping("/{id}")
-    List<WordAndCounter> getBookInfoHandler(@PathVariable("id") int id)  {
+    public BookAndWords getBookInfoHandler(@PathVariable("id") int id)  {
 
         BookFromLibrary book = bookFromLibraryServiceImplementation.getBookById(id);
-
         File bookFile = new File(book.getPathToFile());
 
         ArrayList<WordAndCounter> listOfWords = getWordsFromFileImplementaton.getWordsInListWithPercentage(bookFile, 80);
-        return listOfWords;
+        BookAndWords bookAndWords = new BookAndWords(book, listOfWords);
+        
+        return bookAndWords;
     }
 }
