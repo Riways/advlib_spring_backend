@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import api.DAO.RoleRepository;
@@ -39,6 +40,19 @@ public class DbInitialization {
 	String pathToDict;
 
 	@EventListener(ApplicationReadyEvent.class)
+	@Order(1)
+	public void initRoles() {
+		if(roleRepository.findAll().size()!=0) {
+			return;
+		}
+		Role admin = new Role("ADMIN","Manages all");
+		Role user = new Role ("USER", "Can upload books");
+		roleRepository.save(admin);
+		roleRepository.save(user);
+	}
+	
+	@EventListener(ApplicationReadyEvent.class)
+	@Order(2)
 	public void initDictIfNotPresent() {
 		if (wordService.findAll().size() != 0) {
 			return;
@@ -59,18 +73,10 @@ public class DbInitialization {
 		}
 	}
 	
-	@EventListener(ApplicationReadyEvent.class)
-	public void initRoles() {
-		if(roleRepository.findAll().size()!=0) {
-			return;
-		}
-		Role admin = new Role("ADMIN","Manages all");
-		Role user = new Role ("USER", "Can upload books");
-		roleRepository.save(admin);
-		roleRepository.save(user);
-	}
+
 	
 	@EventListener(ApplicationReadyEvent.class)
+	@Order(3)
 	public void initAdmin() {
 		String username = "root";
 		if(!userService.isUsernameAvailable(username)) {
