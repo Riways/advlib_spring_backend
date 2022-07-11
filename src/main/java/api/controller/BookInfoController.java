@@ -7,6 +7,7 @@ import api.service.book_from_library_service.BookFromLibraryServiceImplementatio
 import api.service.text_analyze_service.GetWordsFromFileImplementaton;
 import api.service.word_service.WordServiceImlementation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +36,7 @@ public class BookInfoController {
     }
 
     @CrossOrigin
+    @Cacheable("bookAndWords")
     @GetMapping("/{id}")
     public BookAndWords getBookInfoHandler(@PathVariable("id") int id)  {
 

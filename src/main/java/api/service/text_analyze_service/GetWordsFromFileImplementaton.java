@@ -75,40 +75,6 @@ public class GetWordsFromFileImplementaton implements GetWordsFromFile {
 	}
 	
 
-//	@Override
-//	public ArrayList<WordAndCounter> getWordsInList(File fileToRead) {  
-//		String text;
-//		long start = System.currentTimeMillis();
-//		ArrayList<WordAndCounter> words = new ArrayList<>();
-//		Pattern pattern = Pattern.compile("[a-z]+[']*[a-z]+");
-//		HashSet<String> wordsWithoutCounter = new HashSet<>();
-//		text = textService.getTextInStringFromFile(fileToRead);
-//		text.toLowerCase();
-//		Matcher matcher = pattern.matcher(text);
-//		while (matcher.find()) {
-//			String word = matcher.group();
-//			if (wordsWithoutCounter.contains(word)) {
-//				for (int i = 0; i < words.size(); i++) {
-//					if (words.get(i).getWord().equals(word)) {
-//						words.get(i).setCounter(words.get(i).getCounter() + 1);
-//						break;
-//					}
-//				}
-//			} else {
-//				wordsWithoutCounter.add(word);
-//				words.add(new WordAndCounter(word, 1));
-//			}
-//		}
-//		long end = System.currentTimeMillis();
-//		System.out.println(end-start  + "words"+  words.size());
-//		Collections.sort(words);
-//		logger.debug(words.size() + " words readed!");
-//		checkWordsInDictionary(words);
-//		logger.debug("Words checked in dictionary! " + words.size() + " words left in list");
-//
-//		return words;
-//	}
-
 	@Override
 	public ArrayList<WordAndCounter> getWordsInListWithPercentage(File fileToRead, int percentage) {
 		if (percentage < 0 || percentage > 100) {
