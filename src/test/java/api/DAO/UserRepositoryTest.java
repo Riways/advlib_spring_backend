@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-
+@SpringBootTest
 class UserRepositoryTest {
 	
 	@Autowired
@@ -17,7 +17,7 @@ class UserRepositoryTest {
 
 	@Test
 	void testGetAllUsernames() {
-		Set<String> usernames = userRepo.getAllUsernames();
+		Set<String> usernames= userRepo.getAllUsernames();
 		assertNotNull(usernames);
 	}
 

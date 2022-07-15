@@ -5,6 +5,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -16,6 +20,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.xml.sax.InputSource;
 
 import api.DAO.RoleRepository;
 import api.entity.Role;
@@ -57,10 +62,11 @@ public class DbInitialization {
 		if (wordService.findAll().size() != 0) {
 			return;
 		}
-		Path dictLocation = Paths.get(System.getProperty("user.dir") + pathToDict);
-		File dictFile = dictLocation.toFile();
+		ClassLoader classLoader = null;
+		classLoader = getClass().getClassLoader();
+		InputStream is = classLoader.getResourceAsStream(pathToDict);
 		List<WordFromDictionary> wordsToSave = new ArrayList<>();
-		try (BufferedReader reader = new BufferedReader(new FileReader(dictFile))) {
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
 			String word;
 			while ((word = reader.readLine()) != null) {
 				wordsToSave.add(new WordFromDictionary(word));

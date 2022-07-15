@@ -12,7 +12,7 @@ public interface StorageService {
 	void storeMultipartFile(MultipartFile file);
 
 	void store(File file);
-
+	
 	String getLocation();
 
 	File generatePathToFile(String filename);

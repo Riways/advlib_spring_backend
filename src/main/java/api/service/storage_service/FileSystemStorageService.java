@@ -35,7 +35,7 @@ public class FileSystemStorageService implements StorageService {
 
 	@PostConstruct
 	public void setRootLocation() {
-		this.rootLocation = Paths.get(System.getProperty("user.dir") + location);
+		this.rootLocation = Paths.get(System.getProperty("user.dir")+ File.separator + location);
 		File directory = rootLocation.toFile();
 		if (!directory.exists()) {
 			directory.mkdir();

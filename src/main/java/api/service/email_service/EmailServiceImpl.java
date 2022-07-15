@@ -1,8 +1,14 @@
 package api.service.email_service;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -36,10 +42,11 @@ public class EmailServiceImpl implements EmailService {
 
 	public void sendEmail(String messageToSend, String receiver) {
 		prop = new Properties();
-		FileInputStream fis = null;
+		ClassLoader classLoader = null;
+		classLoader = getClass().getClassLoader();
+		InputStream streamWithProp =  classLoader.getResourceAsStream(pathToProp);
 		try {
-			fis = new FileInputStream(System.getProperty("user.dir") + pathToProp);
-			prop.load(fis);
+			prop.load(streamWithProp);
 			String username = prop.getProperty("mail.smtp.user");
 			String password = prop.getProperty("mail.smtp.password");
 			Session session = Session.getInstance(prop, new Authenticator() {
@@ -70,7 +77,7 @@ public class EmailServiceImpl implements EmailService {
 			e.printStackTrace();
 		} finally {
 			try {
-				fis.close();
+				streamWithProp.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
