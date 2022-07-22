@@ -3,7 +3,6 @@ package api.service.book_from_library_service;
 import api.DAO.BookFromLibraryRepository;
 import api.entity.BookFromLibrary;
 import api.entity.WordAndCounter;
-import api.service.text_analyze_service.FilterWords;
 import api.service.text_analyze_service.GetWordsFromFile;
 import api.service.text_analyze_service.SentencesAndLettersAnalyze;
 

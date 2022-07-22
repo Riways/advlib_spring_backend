@@ -10,6 +10,10 @@ public class WordAndCounter implements Comparable<WordAndCounter> {
         this.word = word;
         this.counter = counter;
     }
+    
+    public void incrementCounter() {
+    	counter++;
+    }
 
     public String getWord() {
         return word;

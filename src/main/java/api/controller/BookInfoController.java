@@ -42,7 +42,7 @@ public class BookInfoController {
 
         BookFromLibrary book = bookFromLibraryServiceImplementation.getBookById(id);
         File bookFile = new File(book.getPathToFile());
-
+        
         ArrayList<WordAndCounter> listOfWords = getWordsFromFileImplementaton.getWordsInListWithPercentage(bookFile, 80);
         BookAndWords bookAndWords = new BookAndWords(book, listOfWords);
         

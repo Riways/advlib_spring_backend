@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -28,7 +30,7 @@ public class WordServiceImlementation implements WordService {
         return wordRepository.findAll();
     }
 
-
+    
 
     @Override
     public void save(WordFromDictionary wordFromDictionary) {
@@ -40,4 +42,8 @@ public class WordServiceImlementation implements WordService {
         return wordRepository.getWordsFromDictionary();
     }
 
+    
+    public ArrayList<String> getWordsFromDictionaryInList(){
+    	return wordRepository.getWordsFromDictionaryInList();
+    }
 }

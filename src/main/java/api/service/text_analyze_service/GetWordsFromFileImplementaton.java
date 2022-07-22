@@ -2,6 +2,7 @@ package api.service.text_analyze_service;
 
 import api.entity.WordAndCounter;
 import api.service.word_service.WordServiceImlementation;
+import api.util.Trie;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import javax.transaction.Transactional;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,40 +42,39 @@ public class GetWordsFromFileImplementaton implements GetWordsFromFile {
 	public ArrayList<WordAndCounter> getWordsInList(File fileToRead) { // Get all words from file in ArrayList
 		String str;
 		ArrayList<WordAndCounter> words = new ArrayList<>();
+		HashMap<String, WordAndCounter> map = new HashMap<>();
 		Pattern pattern = Pattern.compile("[a-z]+[']*[a-z]+");
-		HashSet<String> wordsWithoutCounter = new HashSet<>();
 		try (BufferedReader reader = new BufferedReader(new FileReader(fileToRead))) {
 			while ((str = reader.readLine()) != null) {
 				str.toLowerCase();
 				Matcher matcher = pattern.matcher(str);
 				while (matcher.find()) {
 					String word = matcher.group();
-					if (wordsWithoutCounter.contains(word)) {
-						for (int i = 0; i < words.size(); i++) {
-							if (words.get(i).getWord().equals(word)) {
-								words.get(i).setCounter(words.get(i).getCounter() + 1);
-								break;
-							}
-						}
+					if (map.containsKey(word)) {
+						WordAndCounter wordToIncrementCounter = map.get(word);
+						wordToIncrementCounter.incrementCounter();
 					} else {
-						wordsWithoutCounter.add(word);
-						words.add(new WordAndCounter(word, 1));
+						WordAndCounter newWord = new WordAndCounter(word, 1);
+						map.put(word, newWord);
 					}
 				}
 			}
-		} catch (FileNotFoundException e) {
+		} catch (
+
+		FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		map.values().forEach((wordAndCounter) -> words.add(wordAndCounter));
 		Collections.sort(words);
 		logger.debug(words.size() + " words readed!");
+
 		checkWordsInDictionary(words);
 		logger.debug("Words checked in dictionary! " + words.size() + " words left in list");
 
 		return words;
 	}
-	
 
 	@Override
 	public ArrayList<WordAndCounter> getWordsInListWithPercentage(File fileToRead, int percentage) {
@@ -87,9 +88,15 @@ public class GetWordsFromFileImplementaton implements GetWordsFromFile {
 
 	@Override
 	public void checkWordsInDictionary(ArrayList<WordAndCounter> wordsToCheck) {
-		HashSet<String> setOfWords = wordServiceImlementation.getOnlyWordsFromDictionary();
+
+		ArrayList<String> words = wordServiceImlementation.getWordsFromDictionaryInList();
+		Trie trie = new Trie();
+		for (String word : words) {
+			trie.addWord(word);
+		}
 		for (int i = 0; i < wordsToCheck.size(); i++) {
-			if (!setOfWords.contains(wordsToCheck.get(i).getWord())) {
+			String word = wordsToCheck.get(i).getWord();
+			if (!trie.isWordPresent(word)) {
 				wordsToCheck.remove(i);
 			}
 		}

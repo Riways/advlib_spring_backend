@@ -15,6 +15,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,12 +37,11 @@ public class FileSystemStorageService implements StorageService {
 
 	@PostConstruct
 	public void setRootLocation() {
-		this.rootLocation = Paths.get(System.getProperty("user.dir")+ File.separator + location);
+		this.rootLocation = Paths.get(System.getProperty("user.dir") + File.separator + location);
 		File directory = rootLocation.toFile();
 		if (!directory.exists()) {
 			directory.mkdir();
 		}
-
 	}
 
 	@Override
@@ -102,9 +103,6 @@ public class FileSystemStorageService implements StorageService {
 		if (Files.exists(pathToCreatingFile)) {
 			throw new StorageException("File " + fileName + " already exist in storage");
 		}
-//		if (!file.canExecute()) {
-//			throw new StorageException("Failed to store empty file " + fileName);
-//		} else 
 		if (!fileName.endsWith(".txt")) {
 			logger.debug("Not txt");
 			throw new StorageException("File must be of type txt");
@@ -122,6 +120,35 @@ public class FileSystemStorageService implements StorageService {
 		} catch (IOException e) {
 			throw new StorageException("Failed to store file " + fileName);
 		}
+
+	}
+
+	@Override
+	public File store(InputStream is, String fileName) {
+		File pathToNewFile = generatePathToFile(fileName);
+		if (pathToNewFile.exists()) {
+			throw new StorageException("File " + fileName + " already exist in storage");
+		}
+		if (!fileName.endsWith(".txt")) {
+			logger.debug("Not txt");
+			throw new StorageException("File must be of type txt");
+		}
+		
+		try (BufferedWriter bufWriter = new BufferedWriter(new FileWriter(pathToNewFile));
+				BufferedReader bufReader = new BufferedReader(new InputStreamReader(is))) {
+			
+			logger.debug("Saving...");
+			String line;
+
+			while ((line = bufReader.readLine()) != null) {
+				bufWriter.write(line);
+			}
+			logger.debug("File was saved!");
+		} catch (IOException e) {
+			throw new StorageException("Failed to store file " + fileName);
+		}
+		
+		return pathToNewFile;
 
 	}
 

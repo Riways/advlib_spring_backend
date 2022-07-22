@@ -4,6 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 public interface StorageService {
 
@@ -20,5 +21,7 @@ public interface StorageService {
 	void deleteBook(String pathToFile) throws IOException;
 
 	void deleteAll();
+
+	File store(InputStream is, String fileName);
 
 }

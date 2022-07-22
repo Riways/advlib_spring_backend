@@ -4,8 +4,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-
-
+uploaded_files
+book.mv.db
 book.trace.db
 
 ### STS ###
